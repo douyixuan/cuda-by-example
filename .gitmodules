@@ -1,0 +1,6 @@
+[submodule "vendor/gobyexample"]
+	path = vendor/gobyexample
+	url = https://github.com/mmcgrana/gobyexample
+[submodule "upstream/gobyexample"]
+	path = upstream/gobyexample
+	url = https://github.com/mmcgrana/gobyexample
