@@ -7,3 +7,6 @@ Error Checking
 Shared Memory
 Unified Memory
 Atomics
+Streams
+Pinned Memory
+Warp Primitives
