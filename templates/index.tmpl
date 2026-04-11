@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CUDA by Example</title>
+    <link rel=stylesheet href="site.css">
+  </head>
+  <body>
+    <div id="intro">
+      <h2><a href="./">CUDA by Example</a></h2>
+      <p>
+        <a href="https://developer.nvidia.com/cuda-toolkit">CUDA</a> is NVIDIA's
+        parallel computing platform and programming model for GPU-accelerated computing.
+      </p>
+
+      <p>
+        <em>CUDA by Example</em> is a hands-on introduction to CUDA using annotated
+        example programs. Check out the <a href="hello-world">first example</a> or
+        browse the full list below.
+      </p>
+
+      <p>
+        Examples target CUDA 12.x and assume a basic familiarity with C/C++.
+      </p>
+
+      <ul>
+      {{range .}}
+        <li><a href="{{.ID}}">{{.Name}}</a></li>
+      {{end}}
+      </ul>
+{{ template "footer" }}
+    </div>
+  </body>
+</html>

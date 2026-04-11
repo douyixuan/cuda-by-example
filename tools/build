@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+SITE_DIR="public"
+GENERATE_DIR="$(mktemp -d)"
+
+function cleanup() {
+  rm -rf "$GENERATE_DIR"
+}
+trap cleanup EXIT
+
+echo "Generating HTML to $GENERATE_DIR..."
+go run -mod=mod tools/generate.go "$GENERATE_DIR"
+
+echo "Copying $GENERATE_DIR to $SITE_DIR"
+mkdir -p "$SITE_DIR"
+cp -rf "${GENERATE_DIR}/." "$SITE_DIR"
+echo "Done → $SITE_DIR"
