@@ -160,7 +160,7 @@ func parseSegs(sourcePath string) []*Seg {
 		}
 		matchDocs := docsPat.MatchString(line)
 		matchCode := !matchDocs
-		newDocs := (lastSeen == "") || ((lastSeen != "docs") && (segs[len(segs)-1].Docs != ""))
+		newDocs := (lastSeen == "") || (lastSeen != "docs")
 		newCode := (lastSeen == "") || ((lastSeen != "code") && (segs[len(segs)-1].Code != ""))
 		if matchDocs {
 			trimmed := docsPat.ReplaceAllString(line, "")
