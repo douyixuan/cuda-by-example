@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -281,6 +282,34 @@ func renderExamples(examples []*Example) {
 	}
 }
 
+func writeSearchIndex(examples []*Example) {
+	type entry struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+		Text string `json:"text"`
+	}
+	entries := make([]entry, 0, len(examples))
+	for _, ex := range examples {
+		var sb strings.Builder
+		for _, segs := range ex.Segs {
+			for _, seg := range segs {
+				sb.WriteString(seg.Docs)
+				sb.WriteString(" ")
+				sb.WriteString(seg.Code)
+				sb.WriteString(" ")
+			}
+		}
+		entries = append(entries, entry{
+			ID:   ex.ID,
+			Name: ex.Name,
+			Text: strings.ToLower(sb.String()),
+		})
+	}
+	data, err := json.Marshal(entries)
+	check(err)
+	check(os.WriteFile(siteDir+"/search-index.json", data, 0644))
+}
+
 func render404() {
 	tmpl := template.New("404")
 	template.Must(tmpl.Parse(mustReadFile("templates/footer.tmpl")))
@@ -304,5 +333,6 @@ func main() {
 	renderIndex(examples)
 	renderExamples(examples)
 	render404()
+	writeSearchIndex(examples)
 	fmt.Println("Done →", siteDir)
 }

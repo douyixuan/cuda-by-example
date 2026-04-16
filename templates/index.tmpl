@@ -4,6 +4,21 @@
     <meta charset="utf-8">
     <title>CUDA by Example</title>
     <link rel=stylesheet href="site.css">
+    <style>
+      #search {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 12px 0;
+        padding: 6px 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      #search:focus { outline: none; border-color: #888; }
+      #no-results { display: none; color: #888; font-size: 14px; }
+    </style>
   </head>
   <body>
     <div id="intro">
@@ -23,12 +38,48 @@
         Examples target CUDA 12.x and assume a basic familiarity with C/C++.
       </p>
 
-      <ul>
+      <input id="search" type="search" placeholder="Search examples…" autocomplete="off">
+      <p id="no-results">No examples match.</p>
+
+      <ul id="example-list">
       {{range .}}
-        <li><a href="{{.ID}}">{{.Name}}</a></li>
+        <li data-id="{{.ID}}"><a href="{{.ID}}">{{.Name}}</a></li>
       {{end}}
       </ul>
 {{ template "footer" }}
     </div>
+    <script>
+      (function() {
+        var input = document.getElementById('search');
+        var list  = document.getElementById('example-list');
+        var none  = document.getElementById('no-results');
+        var items = Array.from(list.querySelectorAll('li'));
+        var index = null;
+
+        fetch('search-index.json')
+          .then(function(r) { return r.json(); })
+          .then(function(data) { index = data; });
+
+        input.addEventListener('input', function() {
+          var q = input.value.trim().toLowerCase();
+          if (!q) {
+            items.forEach(function(li) { li.style.display = ''; });
+            none.style.display = 'none';
+            return;
+          }
+          var visible = 0;
+          items.forEach(function(li) {
+            var id = li.getAttribute('data-id');
+            var entry = index && index.find(function(e) { return e.id === id; });
+            var match = entry
+              ? (entry.name.toLowerCase().includes(q) || entry.text.includes(q))
+              : li.textContent.toLowerCase().includes(q);
+            li.style.display = match ? '' : 'none';
+            if (match) visible++;
+          });
+          none.style.display = visible === 0 ? '' : 'none';
+        });
+      })();
+    </script>
   </body>
 </html>
