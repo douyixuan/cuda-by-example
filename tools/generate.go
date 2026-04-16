@@ -275,7 +275,9 @@ func renderExamples(examples []*Example) {
 	template.Must(tmpl.Parse(mustReadFile("templates/footer.tmpl")))
 	template.Must(tmpl.Parse(mustReadFile("templates/example.tmpl")))
 	for _, ex := range examples {
-		f, err := os.Create(siteDir + "/" + ex.ID)
+		dir := siteDir + "/" + ex.ID
+		ensureDir(dir)
+		f, err := os.Create(dir + "/index.html")
 		check(err)
 		defer f.Close()
 		check(tmpl.Execute(f, ex))

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>CUDA by Example: {{.Name}}</title>
-    <link rel=stylesheet href="site.css">
+    <link rel=stylesheet href="../site.css">
   </head>
   <script>
       window.onkeydown = (e) => {
@@ -12,19 +12,19 @@
           }
           {{if .PrevExample}}
           if (e.key == "ArrowLeft") {
-              window.location.href = '{{.PrevExample.ID}}';
+              window.location.href = '../{{.PrevExample.ID}}';
           }
           {{end}}
           {{if .NextExample}}
           if (e.key == "ArrowRight") {
-              window.location.href = '{{.NextExample.ID}}';
+              window.location.href = '../{{.NextExample.ID}}';
           }
           {{end}}
       }
   </script>
   <body>
     <div class="example" id="{{.ID}}">
-      <h2><a href="./">CUDA by Example</a>: {{.Name}}</h2>
+      <h2><a href="../">CUDA by Example</a>: {{.Name}}</h2>
       {{range .Segs}}
       <table>
         {{range .}}
@@ -41,11 +41,11 @@
       {{end}}
       {{if .NextExample}}
       <p class="next">
-        Next example: <a href="{{.NextExample.ID}}" rel="next">{{.NextExample.Name}}</a>.
+        Next example: <a href="../{{.NextExample.ID}}" rel="next">{{.NextExample.Name}}</a>.
       </p>
       {{end}}
 {{ template "footer" }}
     </div>
-    <script src="site.js" async></script>
+    <script src="../site.js" async></script>
   </body>
 </html>
