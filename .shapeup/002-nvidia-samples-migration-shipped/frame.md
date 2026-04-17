@@ -57,4 +57,4 @@ CUDA 开发者社区持续增长（AI/ML 驱动），但高质量的 "by example
 
 ---
 
-## Status: Frame Go — approved 2026-04-16
+## Status: Shipped — 2026-04-18

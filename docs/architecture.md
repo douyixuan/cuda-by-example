@@ -60,3 +60,52 @@ Living record of architectural patterns, conventions, and decisions accumulated 
 - **No CI/CD**: GitHub Pages deployment not yet configured. Deferred to S5.
 - **`vendor/` naming conflict**: Will cause confusion for Go developers. Plan to rename
   to `upstream/`. (ADR 0004)
+
+---
+
+## NVIDIA Samples Migration (2026-04-18)
+
+### Patterns Introduced
+
+- **Chapter-aware parsing**: `examples.txt` supports `# Chapter Name` lines that group
+  examples into chapters for the index page. The parser returns a dual result
+  `([]*Example, []*Chapter)` — only `renderIndex` uses chapters; all other consumers
+  operate on the flat example list. Backward compatible: no `#` lines → flat list. (ADR 0005)
+- **Testable generator refactoring**: `parseExamples()` refactored into
+  `parseExamplesFrom(txtPath, examplesDir)` to accept paths as arguments, enabling unit
+  testing with `t.TempDir()`. The original function is now a thin wrapper. (ADR 0006)
+- **Content conventions for CUDA examples**: 30-80 lines, self-contained, `//`-comment
+  seg pattern, compile instructions in opening comments, verification output in `main()`,
+  progressive chapter ordering. (ADR 0007)
+
+### Data Model Changes
+
+- **`Chapter` struct**: `Name string`, `Examples []*Example` — groups examples under a named
+  heading. Produced by `parseExamplesFrom`, consumed by `renderIndex` via `indexData`.
+- **`indexData` struct**: `Examples []*Example`, `Chapters []*Chapter` — passed to `index.tmpl`
+  to support both grouped and flat rendering modes.
+
+### Template Changes
+
+- **`index.tmpl`**: Renders `{{range .Chapters}}` with `<div class="chapter"><h3>` containers.
+  Falls back to `{{range .Examples}}` when `Chapters` is nil. Search JS hides empty chapter
+  divs when filtering.
+- **`site.css`**: Added `.chapter` and `.chapter h3` styles with dark mode support.
+
+### Conventions Established
+
+- **Chapter ordering in `examples.txt`**: Chapters follow a progressive learning path:
+  Basics → Memory → Synchronization → Streams → Algorithms → Textures → Advanced → Performance → Libraries.
+  New examples should be added to the appropriate chapter, not appended to the end.
+- **Special compilation requirements**: Examples needing non-default `nvcc` flags (e.g.,
+  `-arch=sm_70`, `-lcublas`, `-rdc=true`) document them in the opening comment block.
+- **Generator test pattern**: Tests create temp directories with stub `.cu` files, call
+  `parseExamplesFrom` with those paths, and assert on the returned data structures.
+
+### Known Limitations
+
+- **Chapter info not on example pages**: Individual example pages don't display which
+  chapter they belong to. Only the index page shows chapter grouping.
+- **No chapter-level navigation**: No "jump to next chapter" UI. Arrow keys navigate
+  linearly across all examples regardless of chapter boundaries.
+- **No CI for example line counts**: The 30-80 line convention is not enforced by automation.
