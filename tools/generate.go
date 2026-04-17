@@ -142,6 +142,12 @@ type Example struct {
 	NextExample *Example
 }
 
+// Chapter groups examples under a named heading on the index page.
+type Chapter struct {
+	Name     string
+	Examples []*Example
+}
+
 func parseSegs(sourcePath string) []*Seg {
 	rawLines := readLines(sourcePath)
 	// Normalize tabs and apply block-comment pre-processing
@@ -223,24 +229,35 @@ func parseAndRenderSegs(sourcePath string) []*Seg {
 	return segs
 }
 
-func parseExamples() []*Example {
-	var exampleNames []string
-	for _, line := range readLines("examples/examples.txt") {
-		if line != "" && !strings.HasPrefix(line, "#") {
-			exampleNames = append(exampleNames, line)
+func parseExamplesFrom(txtPath, examplesDir string) ([]*Example, []*Chapter) {
+	var chapters []*Chapter
+	var curChapter *Chapter
+	hasChapters := false
+
+	examples := make([]*Example, 0)
+	for _, line := range readLines(txtPath) {
+		if line == "" {
+			continue
 		}
-	}
-	examples := make([]*Example, 0, len(exampleNames))
-	for _, name := range exampleNames {
-		ex := &Example{Name: name}
-		id := strings.ToLower(name)
+		if strings.HasPrefix(line, "# ") {
+			hasChapters = true
+			curChapter = &Chapter{Name: strings.TrimPrefix(line, "# ")}
+			chapters = append(chapters, curChapter)
+			continue
+		}
+		if strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		ex := &Example{Name: line}
+		id := strings.ToLower(line)
 		id = strings.ReplaceAll(id, " ", "-")
 		id = strings.ReplaceAll(id, "/", "-")
 		id = strings.ReplaceAll(id, "'", "")
 		id = dashPat.ReplaceAllString(id, "-")
 		ex.ID = id
 		ex.Segs = make([][]*Seg, 0)
-		sourcePaths := mustGlob("examples/" + id + "/*")
+		sourcePaths := mustGlob(examplesDir + "/" + id + "/*")
 		for _, sp := range sourcePaths {
 			if !isDir(sp) && strings.HasSuffix(sp, ".cu") {
 				segs := parseAndRenderSegs(sp)
@@ -248,6 +265,9 @@ func parseExamples() []*Example {
 			}
 		}
 		examples = append(examples, ex)
+		if curChapter != nil {
+			curChapter.Examples = append(curChapter.Examples, ex)
+		}
 	}
 	for i, ex := range examples {
 		if i > 0 {
@@ -257,17 +277,29 @@ func parseExamples() []*Example {
 			ex.NextExample = examples[i+1]
 		}
 	}
-	return examples
+	if !hasChapters {
+		chapters = nil
+	}
+	return examples, chapters
 }
 
-func renderIndex(examples []*Example) {
+func parseExamples() ([]*Example, []*Chapter) {
+	return parseExamplesFrom("examples/examples.txt", "examples")
+}
+
+type indexData struct {
+	Examples []*Example
+	Chapters []*Chapter
+}
+
+func renderIndex(examples []*Example, chapters []*Chapter) {
 	tmpl := template.New("index")
 	template.Must(tmpl.Parse(mustReadFile("templates/footer.tmpl")))
 	template.Must(tmpl.Parse(mustReadFile("templates/index.tmpl")))
 	f, err := os.Create(siteDir + "/index.html")
 	check(err)
 	defer f.Close()
-	check(tmpl.Execute(f, examples))
+	check(tmpl.Execute(f, indexData{Examples: examples, Chapters: chapters}))
 }
 
 func renderExamples(examples []*Example) {
@@ -330,9 +362,9 @@ func main() {
 	copyFile("templates/site.css", siteDir+"/site.css")
 	copyFile("templates/site.js", siteDir+"/site.js")
 	copyFile("templates/favicon.ico", siteDir+"/favicon.ico")
-	examples := parseExamples()
+	examples, chapters := parseExamples()
 	fmt.Printf("Generating %d examples...\n", len(examples))
-	renderIndex(examples)
+	renderIndex(examples, chapters)
 	renderExamples(examples)
 	render404()
 	writeSearchIndex(examples)

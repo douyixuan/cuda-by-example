@@ -41,20 +41,36 @@
       <input id="search" type="search" placeholder="Search examples…" autocomplete="off">
       <p id="no-results">No examples match.</p>
 
-      <ul id="example-list">
-      {{range .}}
-        <li data-id="{{.ID}}"><a href="{{.ID}}">{{.Name}}</a></li>
+      <div id="example-list">
+      {{if .Chapters}}
+        {{range .Chapters}}
+        <div class="chapter">
+          <h3>{{.Name}}</h3>
+          <ul>
+          {{range .Examples}}
+            <li data-id="{{.ID}}"><a href="{{.ID}}">{{.Name}}</a></li>
+          {{end}}
+          </ul>
+        </div>
+        {{end}}
+      {{else}}
+        <ul>
+        {{range .Examples}}
+          <li data-id="{{.ID}}"><a href="{{.ID}}">{{.Name}}</a></li>
+        {{end}}
+        </ul>
       {{end}}
-      </ul>
+      </div>
 {{ template "footer" }}
     </div>
     <script>
       (function() {
-        var input = document.getElementById('search');
-        var list  = document.getElementById('example-list');
-        var none  = document.getElementById('no-results');
-        var items = Array.from(list.querySelectorAll('li'));
-        var index = null;
+        var input    = document.getElementById('search');
+        var list     = document.getElementById('example-list');
+        var none     = document.getElementById('no-results');
+        var items    = Array.from(list.querySelectorAll('li'));
+        var chapters = Array.from(list.querySelectorAll('.chapter'));
+        var index    = null;
 
         fetch('search-index.json')
           .then(function(r) { return r.json(); })
@@ -64,6 +80,7 @@
           var q = input.value.trim().toLowerCase();
           if (!q) {
             items.forEach(function(li) { li.style.display = ''; });
+            chapters.forEach(function(ch) { ch.style.display = ''; });
             none.style.display = 'none';
             return;
           }
@@ -76,6 +93,12 @@
               : li.textContent.toLowerCase().includes(q);
             li.style.display = match ? '' : 'none';
             if (match) visible++;
+          });
+          chapters.forEach(function(ch) {
+            var hasVisible = Array.from(ch.querySelectorAll('li')).some(
+              function(li) { return li.style.display !== 'none'; }
+            );
+            ch.style.display = hasVisible ? '' : 'none';
           });
           none.style.display = visible === 0 ? '' : 'none';
         });

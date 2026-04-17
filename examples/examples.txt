@@ -1,12 +1,58 @@
+# Basics
 Hello World
 Device Info
 Vector Add
 Thread Indexing
 2D Grid
 Error Checking
+
+# Memory Management
 Shared Memory
 Unified Memory
-Atomics
-Streams
 Pinned Memory
+Constant Memory
+Memory Coalescing
+Zero-Copy Memory
+
+# Synchronization
+Atomics
 Warp Primitives
+Cooperative Groups
+Events and Timing
+
+# Streams and Concurrency
+Streams
+CUDA Graphs
+Multi-Stream Pipeline
+Callbacks
+
+# Parallel Algorithms
+Parallel Reduction
+Prefix Sum
+Histogram
+Matrix Multiply
+Matrix Transpose
+Merge Sort
+
+# Textures and Surfaces
+Texture Memory 1D
+Texture Memory 2D
+Surface Memory
+
+# Advanced Kernel Techniques
+Dynamic Parallelism
+Function Pointers
+Template Kernels
+Occupancy API
+WMMA Tensor Core
+
+# Performance Optimization
+Bank Conflict Avoidance
+Loop Unrolling
+Instruction-Level Parallelism
+Memory Access Patterns
+
+# Libraries
+Thrust Basics
+cuBLAS Basics
+cuRAND Basics

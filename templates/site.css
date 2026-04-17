@@ -89,7 +89,23 @@ div#intro p {
   padding-top: 20px;
 }
 div#intro ul {
-  padding-top: 20px;
+  padding-top: 8px;
+}
+div#intro .chapter {
+  margin-top: 16px;
+}
+div#intro .chapter:first-child {
+  margin-top: 0;
+}
+div#intro .chapter h3 {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #808080;
+  padding-top: 12px;
+  padding-bottom: 4px;
 }
 table td {
   border: 0;
@@ -203,8 +219,10 @@ body .c1 { color: #808080 }  /* Comment.Single */
   td.code {
     background: #282828;
   }
+  div#intro .chapter h3 {
+    color: #898e98;
+  }
 
- 
   /* Syntax highlighting: dark mode */
   body .nx { }                 /* Name.Other */
   body .nf { }                 /* Name.Function */
