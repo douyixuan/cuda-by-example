@@ -197,10 +197,32 @@ func parseSegs(sourcePath string) []*Seg {
 	return segs
 }
 
+var cudaKeywords = []string{
+	"__global__", "__device__", "__host__", "__shared__", "__constant__",
+	"__managed__", "__restrict__", "__noinline__", "__forceinline__",
+	"__launch_bounds__",
+}
+
+func cudaLexer() chroma.Lexer {
+	cpp := lexers.Get("C++")
+	if cpp == nil {
+		return lexers.Fallback
+	}
+	return chroma.TypeRemappingLexer(cpp, chroma.TypeMapping{
+		{From: chroma.Name, To: chroma.KeywordReserved, Words: cudaKeywords},
+	})
+}
+
 func chromaFormat(code, filePath string) string {
-	lexer := lexers.Get(filePath)
-	if lexer == nil {
-		lexer = lexers.Fallback
+	ext := strings.ToLower(filepath.Ext(filePath))
+	var lexer chroma.Lexer
+	if ext == ".cu" || ext == ".cuh" {
+		lexer = cudaLexer()
+	} else {
+		lexer = lexers.Get(filePath)
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
 	}
 	lexer = chroma.Coalesce(lexer)
 	style := styles.Get("swapoff")

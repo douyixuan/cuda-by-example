@@ -175,27 +175,38 @@ td.code {
   background: #f0f0f0;
 }
 
-/* Syntax highlighting: light mode */
-body .nx { }                 /* Name.Other: package, variable, struct, param, generic type names, etc. */
-body .nf { }                 /* Name.Function: function names (def and call) */
-body .o  { }                 /* Operator: :=, &, *, +, &&, <, etc. */
-body .p  { }                 /* Plain: = , . : [ ( { etc. */
-body .k  { color: #954121 }  /* Keyword: if, for, range, return, defer, etc.  */
-body .kc { color: #954121 }  /* Keyword.Constant: nil, true, false */
-body .kd { color: #954121 }  /* Keyword.Declaration: func, var, type, struct, map, chan, etc. */
-body .kn { color: #954121 }  /* Keyword.Namespace: package, import */
-body .nb { color: #954121 }  /* Name.Builtin: make, len, delete, append, etc. */
-body .kt { color: #b00040 }  /* Keyword.Type: string, int, byte, error, etc. */
-body .m  { color: #666666 }  /* Literal.Number */
-body .mf { color: #666666 }  /* Literal.Number.Float */
-body .mh { color: #666666 }  /* Literal.Number.Hex */
-body .mi { color: #666666 }  /* Literal.Number.Integer */
-body .mo { color: #666666 }  /* Literal.Number.Oct */
-body .s  { color: #219161 }  /* Literal.String */
-body .sc { color: #219161 }  /* Literal.String.Char */
-body .gp { color: #000080 }  /* Generic.Prompt: shell prompt */
-body .go { color: #808080 }  /* Generic.Output: shell output */
-body .c1 { color: #808080 }  /* Comment.Single */
+/* Syntax highlighting: light mode — GitHub Light theme */
+body .k  { color: #cf222e }
+body .kc { color: #cf222e }
+body .kd { color: #cf222e }
+body .kn { color: #cf222e }
+body .kr { color: #cf222e }
+body .kt { color: #cf222e }
+body .n  { color: #1f2328 }
+body .nx { color: #1f2328 }
+body .nf { color: #6639ba }
+body .nb { color: #6639ba }
+body .nc { color: #1f2328 }
+body .o  { color: #0550ae }
+body .p  { color: #1f2328 }
+body .s  { color: #0a3069 }
+body .sa { color: #0a3069 }
+body .sc { color: #0a3069 }
+body .se { color: #0a3069 }
+body .m  { color: #0550ae }
+body .mb { color: #0550ae }
+body .mf { color: #0550ae }
+body .mh { color: #0550ae }
+body .mi { color: #0550ae }
+body .mo { color: #0550ae }
+body .c  { color: #57606a }
+body .c1 { color: #57606a }
+body .cm { color: #57606a }
+body .cp { color: #57606a }
+body .cpf { color: #57606a }
+body .gp { color: #0550ae }
+body .go { color: #57606a }
+body .err { color: #82071e; background-color: #ffebe9 }
 
 
 @media (prefers-color-scheme: dark) {
@@ -223,25 +234,36 @@ body .c1 { color: #808080 }  /* Comment.Single */
     color: #898e98;
   }
 
-  /* Syntax highlighting: dark mode */
-  body .nx { }                 /* Name.Other */
-  body .nf { }                 /* Name.Function */
-  body .o  { }                 /* Operator */
-  body .p  { }                 /* Plain */
-  body .k  { color: #af5a54 }  /* Keyword */
-  body .kc { color: #af5a54 }  /* Keyword.Constant */
-  body .kd { color: #af5a54 }  /* Keyword.Declaration */
-  body .kn { color: #af5a54 }  /* Keyword.Namespace */
-  body .nb { color: #af5a54 }  /* Name.Builtin */
-  body .kt { color: #b64343 }  /* Keyword.Type */
-  body .m  { color: #688ec8 }  /* Literal.Number */
-  body .mf { color: #688ec8 }  /* Literal.Number.Float */
-  body .mh { color: #688ec8 }  /* Literal.Number.Hex */
-  body .mi { color: #688ec8 }  /* Literal.Number.Integer */
-  body .mo { color: #688ec8 }  /* Literal.Number.Oct */
-  body .s  { color: #718e72 }  /* Literal.String */
-  body .sc { color: #718e72 }  /* Literal.String.Char */
-  body .gp { color: #8a6ab1 }  /* Generic.Prompt */
-  body .go { color: #868686 }  /* Generic.Output */
-  body .c1 { color: #868686 }  /* Comment.Single */
+  /* Syntax highlighting: dark mode — GitHub Dark theme */
+  body .k  { color: #ff7b72 }
+  body .kc { color: #79c0ff }
+  body .kd { color: #ff7b72 }
+  body .kn { color: #ff7b72 }
+  body .kr { color: #ff7b72 }
+  body .kt { color: #ff7b72 }
+  body .n  { color: #e6edf3 }
+  body .nx { color: #e6edf3 }
+  body .nf { color: #d2a8ff }
+  body .nb { color: #d2a8ff }
+  body .nc { color: #f0883e }
+  body .o  { color: #ff7b72 }
+  body .p  { color: #e6edf3 }
+  body .s  { color: #a5d6ff }
+  body .sa { color: #79c0ff }
+  body .sc { color: #a5d6ff }
+  body .se { color: #79c0ff }
+  body .m  { color: #79c0ff }
+  body .mb { color: #79c0ff }
+  body .mf { color: #79c0ff }
+  body .mh { color: #79c0ff }
+  body .mi { color: #79c0ff }
+  body .mo { color: #79c0ff }
+  body .c  { color: #8b949e; font-style: italic }
+  body .c1 { color: #8b949e; font-style: italic }
+  body .cm { color: #8b949e; font-style: italic }
+  body .cp { color: #8b949e }
+  body .cpf { color: #8b949e }
+  body .gp { color: #8b949e }
+  body .go { color: #8b949e }
+  body .err { color: #f85149 }
 }

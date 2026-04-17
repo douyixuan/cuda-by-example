@@ -3,8 +3,67 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
+
+func TestCUFilesProduceSemanticTokens(t *testing.T) {
+	code := `int main() { return 0; }`
+	rendered := chromaFormat(code, "test.cu")
+	if !strings.Contains(rendered, `class="kt"`) {
+		t.Errorf(".cu files not producing semantic tokens\nGot: %s", rendered)
+	}
+}
+
+func TestCUDAKeywordsHighlighted(t *testing.T) {
+	code := `__global__ void hello() {}`
+	rendered := chromaFormat(code, "test.cu")
+
+	wantClasses := []string{"kr", "kt", "nf"}
+	for _, cls := range wantClasses {
+		needle := `class="` + cls + `"`
+		if !strings.Contains(rendered, needle) {
+			t.Errorf("chromaFormat output missing %s token class\nGot: %s", cls, rendered)
+		}
+	}
+}
+
+func TestCUDAKeywordsAreKeywordReserved(t *testing.T) {
+	cudaKeywords := []string{
+		"__global__", "__device__", "__host__",
+		"__shared__", "__constant__",
+	}
+	for _, kw := range cudaKeywords {
+		rendered := chromaFormat(kw+" void f() {}", "test.cu")
+		if !strings.Contains(rendered, `class="kr"`) {
+			t.Errorf("%s not tokenized as KeywordReserved (kr)\nGot: %s", kw, rendered)
+		}
+	}
+}
+
+func TestChromaFormatProducesSemanticTokens(t *testing.T) {
+	code := `#include <stdio.h>
+__global__ void hello() {
+    printf("Hello from the GPU!\n");
+}
+int main() {
+    hello<<<1, 1>>>();
+    cudaDeviceSynchronize();
+    return 0;
+}`
+	rendered := chromaFormat(code, "test.cu")
+
+	semanticClasses := []string{"k", "nf", "s", "mi", "cp"}
+	found := 0
+	for _, cls := range semanticClasses {
+		if strings.Contains(rendered, `class="`+cls+`"`) {
+			found++
+		}
+	}
+	if found < 3 {
+		t.Errorf("expected at least 3 semantic token classes, found %d in output:\n%s", found, rendered)
+	}
+}
 
 func TestParseExamplesWithChapters(t *testing.T) {
 	tmpDir := t.TempDir()
