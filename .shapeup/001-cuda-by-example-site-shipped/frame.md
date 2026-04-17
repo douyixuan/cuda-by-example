@@ -61,4 +61,4 @@ Breakdown:
 
 ---
 
-## Status: Frame Go — approved 2026-04-09
+## Status: Shipped — 2026-04-16 (Frame Go approved 2026-04-09)

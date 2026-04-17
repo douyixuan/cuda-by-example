@@ -272,4 +272,4 @@ testing deferred to S5.
 
 ---
 
-## Status: Shape Go — approved 2026-04-09
+## Status: Shipped — 2026-04-16 (Shape Go approved 2026-04-09)
