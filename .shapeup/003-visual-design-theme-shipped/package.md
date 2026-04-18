@@ -73,4 +73,4 @@ cuda-by-example 的代码块完全没有语法高亮。根因是 `.cu` 文件扩
 
 ---
 
-## Status: Shape Go — approved 2026-04-18
+## Status: Shipped — approved 2026-04-18

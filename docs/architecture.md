@@ -109,3 +109,48 @@ Living record of architectural patterns, conventions, and decisions accumulated 
 - **No chapter-level navigation**: No "jump to next chapter" UI. Arrow keys navigate
   linearly across all examples regardless of chapter boundaries.
 - **No CI for example line counts**: The 30-80 line convention is not enforced by automation.
+
+---
+
+## Code Syntax Highlighting (2026-04-18)
+
+### Patterns Introduced
+
+- **Vendored lexer extension**: CUDA-specific lexer behavior is added by editing the vendored
+  Chroma XML file (`vendor/.../lexers/embedded/c++.xml`) rather than writing a new lexer.
+  The `//go:embed` directive picks up changes automatically at compile time. Future language
+  extensions should follow this pattern before considering a standalone lexer. (ADR 0003 updated)
+- **GitHub theme via vendored styles**: Syntax highlight colors are sourced from Chroma's own
+  vendored `styles/github.xml` and `styles/github-dark.xml`, then applied in `site.css` under
+  `prefers-color-scheme` media queries. This keeps the palette in sync with the vendored Chroma
+  version. (ADR 0008)
+
+### Key Files Changed
+
+| File | Change |
+|------|--------|
+| `vendor/.../lexers/embedded/c++.xml` | Added `*.cu`/`*.cuh` filenames; added CUDA keyword rule |
+| `templates/site.css` | Replaced light+dark syntax colors with GitHub theme (17 classes each) |
+| `tools/generate_test.go` | Added 4 syntax highlighting tests |
+
+### Conventions Established
+
+- **CUDA keyword tokenization**: `__global__`, `__device__`, `__host__`, `__shared__`,
+  `__constant__`, `__managed__`, `__restrict__`, `__noinline__`, `__forceinline__`,
+  `__launch_bounds__` are tokenized as `KeywordReserved` (`kr` CSS class). The regex uses
+  explicit enumeration to avoid false matches on `__cplusplus`, `__LINE__`, etc.
+- **Syntax highlight test pattern**: Tests call `chromaFormat(code, "test.cu")` and assert
+  on CSS class presence in the rendered HTML string. Lexer registration is tested separately
+  via `cudaLexer()` asserting `cfg.Name == "C++"`.
+- **17 token classes**: The canonical set of Chroma CSS classes used by C++/CUDA output is:
+  `k`, `kt`, `kr`, `kd`, `nc`, `nf`, `o`, `p`, `s`, `sa`, `se`, `mi`, `mb`, `c`, `cm`,
+  `cp`, `cpf`. Any future theme change should cover all 17.
+
+### Known Limitations
+
+- **`<<<>>>` not specially highlighted**: CUDA kernel launch syntax tokenizes as 6 individual
+  Operator tokens. Acceptable — they render with operator color, which is visually distinct.
+- **CUDA built-in variables not highlighted**: `threadIdx.x`, `blockDim.x`, etc. stay as
+  generic `Name` tokens. Standard behavior per GitHub theme; no special color.
+- **No theme toggle**: Only `prefers-color-scheme` auto-detection. A manual toggle was
+  explicitly deferred as out of scope.
