@@ -7,11 +7,11 @@ import (
 	"testing"
 )
 
-func TestCUFilesProduceSemanticTokens(t *testing.T) {
-	code := `int main() { return 0; }`
-	rendered := chromaFormat(code, "test.cu")
-	if !strings.Contains(rendered, `class="kt"`) {
-		t.Errorf(".cu files not producing semantic tokens\nGot: %s", rendered)
+func TestCUFilesUseCppLexer(t *testing.T) {
+	lexer := cudaLexer()
+	cfg := lexer.Config()
+	if cfg.Name != "C++" {
+		t.Errorf("expected C++ lexer for .cu files, got %q", cfg.Name)
 	}
 }
 
