@@ -26,3 +26,6 @@
 ## What Surprised Us
 - The fix was exactly as shaped — no unexpected complications. The C++ lexer's function definition regex already handled `__global__ void hello()` correctly, confirming the shaping validation.
 - Token coverage in the rendered HTML is comprehensive: `k`, `kt`, `kr`, `nf`, `n`, `o`, `p`, `s`, `se`, `mi`, `cp`, `cpf` all present across examples.
+
+## Plan Adjustment (Post-Build)
+- `TestCUFilesProduceSemanticTokens` was replaced with `TestCUFilesUseCppLexer`: the original test inferred lexer registration indirectly by checking rendered HTML for `class="kt"`, but `int main()` doesn't reliably produce a `kt` token. The replacement calls `cudaLexer()` directly and asserts `cfg.Name == "C++"` — more precise and less brittle. The semantic token coverage is now handled by `TestChromaFormatProducesSemanticTokens`.
