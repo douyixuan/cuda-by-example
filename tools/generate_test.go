@@ -202,6 +202,93 @@ func TestTexturesChapterMovedToEnd(t *testing.T) {
 	}
 }
 
+func TestLLMOperatorsChapterExistsInExamplesTxt(t *testing.T) {
+	exDir := filepath.Join("..", "examples")
+	examplesFile := filepath.Join(exDir, "examples.txt")
+
+	_, chapters := parseExamplesFrom(examplesFile, exDir)
+
+	var llmChapter *Chapter
+	for _, ch := range chapters {
+		if ch.Name == "LLM Operators" {
+			llmChapter = ch
+			break
+		}
+	}
+	if llmChapter == nil {
+		t.Fatal("LLM Operators chapter not found in examples.txt")
+	}
+	if len(llmChapter.Examples) != 8 {
+		t.Errorf("LLM Operators chapter: want 8 examples, got %d", len(llmChapter.Examples))
+	}
+
+	wantIDs := []string{
+		"online-softmax", "layer-norm", "rms-norm", "gelu-activation",
+		"rope-embedding", "int8-quantization", "naive-attention", "flash-attention-tiling",
+	}
+	for i, ex := range llmChapter.Examples {
+		if ex.ID != wantIDs[i] {
+			t.Errorf("LLM example %d: want ID %q, got %q", i, wantIDs[i], ex.ID)
+		}
+	}
+}
+
+func TestAdvancedKernelTechniquesHasKernelFusion(t *testing.T) {
+	exDir := filepath.Join("..", "examples")
+	examplesFile := filepath.Join(exDir, "examples.txt")
+
+	_, chapters := parseExamplesFrom(examplesFile, exDir)
+
+	var ch *Chapter
+	for _, c := range chapters {
+		if c.Name == "Advanced Kernel Techniques" {
+			ch = c
+			break
+		}
+	}
+	if ch == nil {
+		t.Fatal("Advanced Kernel Techniques chapter not found")
+	}
+	if len(ch.Examples) != 6 {
+		t.Errorf("Advanced Kernel Techniques: want 6 examples, got %d", len(ch.Examples))
+	}
+	last := ch.Examples[len(ch.Examples)-1]
+	if last.ID != "kernel-fusion" {
+		t.Errorf("last Advanced Kernel Techniques example: want kernel-fusion, got %q", last.ID)
+	}
+}
+
+func TestLibrariesHasCublasBatchedGemm(t *testing.T) {
+	exDir := filepath.Join("..", "examples")
+	examplesFile := filepath.Join(exDir, "examples.txt")
+
+	_, chapters := parseExamplesFrom(examplesFile, exDir)
+
+	var ch *Chapter
+	for _, c := range chapters {
+		if c.Name == "Libraries" {
+			ch = c
+			break
+		}
+	}
+	if ch == nil {
+		t.Fatal("Libraries chapter not found")
+	}
+	if len(ch.Examples) != 4 {
+		t.Errorf("Libraries: want 4 examples, got %d", len(ch.Examples))
+	}
+	found := false
+	for _, ex := range ch.Examples {
+		if ex.ID == "cublas-batched-gemm" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Error("cublas-batched-gemm not found in Libraries chapter")
+	}
+}
+
 func TestParseExamplesChapterPointers(t *testing.T) {
 	tmpDir := t.TempDir()
 	exDir := filepath.Join(tmpDir, "examples")

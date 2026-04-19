@@ -47,6 +47,7 @@ Function Pointers
 Template Kernels
 Occupancy API
 WMMA Tensor Core
+Kernel Fusion
 
 # Performance Optimization
 Bank Conflict Avoidance
@@ -54,9 +55,20 @@ Loop Unrolling
 Instruction-Level Parallelism
 Memory Access Patterns
 
+# LLM Operators
+Online Softmax
+Layer Norm
+RMS Norm
+GELU Activation
+RoPE Embedding
+INT8 Quantization
+Naive Attention
+Flash Attention Tiling
+
 # Libraries
 Thrust Basics
 cuBLAS Basics
+cuBLAS Batched GEMM
 cuRAND Basics
 
 # Textures and Surfaces
