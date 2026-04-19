@@ -158,6 +158,50 @@ Vector Add`
 	}
 }
 
+func TestCUBChapterExistsInExamplesTxt(t *testing.T) {
+	exDir := filepath.Join("..", "examples")
+	examplesFile := filepath.Join(exDir, "examples.txt")
+
+	examples, chapters := parseExamplesFrom(examplesFile, exDir)
+	_ = examples
+
+	var cubChapter *Chapter
+	for _, ch := range chapters {
+		if ch.Name == "CUB Library" {
+			cubChapter = ch
+			break
+		}
+	}
+	if cubChapter == nil {
+		t.Fatal("CUB Library chapter not found in examples.txt")
+	}
+	if len(cubChapter.Examples) != 5 {
+		t.Errorf("CUB Library chapter: want 5 examples, got %d", len(cubChapter.Examples))
+	}
+
+	wantIDs := []string{"cub-warp-reduce", "cub-block-reduce", "cub-device-reduce", "cub-device-scan", "cub-device-sort"}
+	for i, ex := range cubChapter.Examples {
+		if ex.ID != wantIDs[i] {
+			t.Errorf("CUB example %d: want ID %q, got %q", i, wantIDs[i], ex.ID)
+		}
+	}
+}
+
+func TestTexturesChapterMovedToEnd(t *testing.T) {
+	exDir := filepath.Join("..", "examples")
+	examplesFile := filepath.Join(exDir, "examples.txt")
+
+	_, chapters := parseExamplesFrom(examplesFile, exDir)
+
+	if len(chapters) == 0 {
+		t.Fatal("no chapters found")
+	}
+	last := chapters[len(chapters)-1]
+	if last.Name != "Textures and Surfaces" {
+		t.Errorf("last chapter should be Textures and Surfaces, got %q", last.Name)
+	}
+}
+
 func TestParseExamplesChapterPointers(t *testing.T) {
 	tmpDir := t.TempDir()
 	exDir := filepath.Join(tmpDir, "examples")

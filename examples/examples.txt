@@ -34,10 +34,12 @@ Matrix Multiply
 Matrix Transpose
 Merge Sort
 
-# Textures and Surfaces
-Texture Memory 1D
-Texture Memory 2D
-Surface Memory
+# CUB Library
+CUB Warp Reduce
+CUB Block Reduce
+CUB Device Reduce
+CUB Device Scan
+CUB Device Sort
 
 # Advanced Kernel Techniques
 Dynamic Parallelism
@@ -56,3 +58,8 @@ Memory Access Patterns
 Thrust Basics
 cuBLAS Basics
 cuRAND Basics
+
+# Textures and Surfaces
+Texture Memory 1D
+Texture Memory 2D
+Surface Memory
