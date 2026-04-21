@@ -157,6 +157,44 @@ Living record of architectural patterns, conventions, and decisions accumulated 
 
 ---
 
+## LLM Operators — CUB + LLM Chapters (2026-04-21)
+
+### Patterns Introduced
+
+- **Content-only chapter extension**: New chapters and examples are added exclusively via
+  `examples.txt` (new `# Chapter Name` headers) and new `.cu` files. Zero generator changes
+  required. Validated the feature 002 architecture at scale: 9 → 11 chapters, 41 → 56
+  examples. (ADR 0009)
+- **First-example chapter intro**: When a chapter needs an introductory explanation that
+  the index page can't carry, expand the opening comment of the chapter's first example.
+  `cub-warp-reduce.cu` explains CUB's three-level architecture and the relationship between
+  all 5 CUB examples. (ADR 0009)
+- **Source citations as Markdown links**: `// Source: [display](url)` in `//` comments
+  renders as a clickable `<a>` tag via Blackfriday. Zero generator changes; leverages the
+  existing Markdown-in-comments pipeline. (ADR 0010)
+
+### Conventions Established
+
+- **`Source:` line in opening comment**: All examples derived from production codebases
+  include a `// Source: [owner/repo](full-url) — file-or-dir` line before `// Compile:`.
+- **Markdown `\_` escaping**: Underscores in URL path segments within `Source:` links must
+  be escaped as `\_` to prevent Blackfriday italicizing them.
+- **Chapter ordering principle**: Chapters follow prerequisite order. CUB (ch.6) follows
+  Parallel Algorithms (ch.5) to show library abstractions after manual implementations.
+  LLM Operators (ch.9) follows Advanced Kernel Techniques (ch.7) and Performance
+  Optimization (ch.8). Textures and Surfaces moved to last (ch.11) — not on the main path.
+
+### Known Limitations
+
+- **No index-page chapter descriptions**: The index only shows `<h3>Chapter Name</h3>` +
+  example links. Chapter-level description text would require generator + template changes
+  (add `Description string` to `Chapter` struct, parse from `examples.txt`, render in
+  `index.tmpl`). Workaround: first-example intro pattern.
+- **Source: convention unenforced**: No linter checks that new LLM/CUB examples include a
+  `Source:` line. Relies on author convention.
+
+---
+
 ## LLM Operators Chapter Design (2026-04-21)
 
 ### What Was Added
