@@ -2,6 +2,7 @@
 // query/key dimensions. Thread i handles the pair (2i, 2i+1), applying
 // a rotation by angle pos * theta^(-2i/d). Used in LLaMA, Mistral, GPT-NeoX.
 //
+// Source: [github.com/meta-llama/llama](https://github.com/meta-llama/llama/blob/main/llama/model.py) — apply\_rotary\_emb
 // Compile: nvcc -arch=sm_80 rope-embedding.cu -o rope-embedding
 
 #include <stdio.h>

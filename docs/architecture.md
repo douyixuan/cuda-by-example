@@ -154,3 +154,85 @@ Living record of architectural patterns, conventions, and decisions accumulated 
   generic `Name` tokens. Standard behavior per GitHub theme; no special color.
 - **No theme toggle**: Only `prefers-color-scheme` auto-detection. A manual toggle was
   explicitly deferred as out of scope.
+
+---
+
+## LLM Operators Chapter Design (2026-04-21)
+
+### What Was Added
+
+56 total examples across 11 chapters (up from 41 examples, 9 chapters). Two new chapters
+inserted, one chapter moved, two existing chapters extended.
+
+### Chapter Ordering — Learning Path Rationale
+
+| # | Chapter | Examples | Role in path |
+|---|---------|----------|--------------|
+| 1 | Basics | 6 | Entry point: threads, grids, device query |
+| 2 | Memory Management | 6 | Core memory hierarchy: shared, unified, pinned, constant |
+| 3 | Synchronization | 4 | Atomics, warp shuffles, cooperative groups |
+| 4 | Streams and Concurrency | 4 | Overlap, pipelines, async execution |
+| 5 | Parallel Algorithms | 6 | Reduction, scan, sort, matrix ops — the building blocks |
+| 6 | **CUB Library** | 5 | NVIDIA's official primitives — same ops as ch.5, zero boilerplate |
+| 7 | Advanced Kernel Techniques | 6 | Dynamic parallelism, occupancy, tensor cores, kernel fusion |
+| 8 | Performance Optimization | 4 | Bank conflicts, ILP, memory access patterns |
+| 9 | **LLM Operators** | 8 | Softmax → LayerNorm → RMSNorm → GELU → RoPE → INT8 → Attention |
+| 10 | Libraries | 4 | Thrust, cuBLAS (single + batched), cuRAND |
+| 11 | Textures and Surfaces | 3 | Legacy / specialist API — useful but not on the main path |
+
+**Textures moved to last**: Texture memory is rarely used in modern LLM/ML workloads.
+Moving it to position 11 removes it from the critical learning path without deleting it.
+
+**CUB positioned after Parallel Algorithms**: Readers implement reduction/scan manually
+first (ch.5), then see how CUB abstracts the same operations (ch.6). CUB then serves
+as a prerequisite for understanding CUB-based patterns inside LLM kernels.
+
+**Kernel Fusion added to Advanced Kernel Techniques** (before LLM Operators): The
+bias+activation fusion pattern is the simplest real-world kernel fusion, preparing
+readers for the fused online-softmax loops in FlashAttention.
+
+### Reference Repositories
+
+Sources referenced from `.cu` opening comments. Each URL points to the folder or file
+most relevant to the concept taught.
+
+| Example | Concept | Repository URL |
+|---------|---------|----------------|
+| `cub-warp-reduce` | CUB WarpReduce | https://github.com/NVIDIA/cccl/tree/main/cub/cub/warp |
+| `cub-block-reduce` | CUB BlockReduce | https://github.com/NVIDIA/cccl/tree/main/cub/cub/block |
+| `cub-device-reduce` | CUB DeviceReduce | https://github.com/NVIDIA/cccl/tree/main/cub/cub/device |
+| `cub-device-scan` | CUB DeviceScan | https://github.com/NVIDIA/cccl/tree/main/cub/cub/device |
+| `cub-device-sort` | CUB DeviceSort (radix sort) | https://github.com/NVIDIA/cccl/tree/main/cub/cub/device |
+| `kernel-fusion` | Fused bias+activation | https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/fusions |
+| `cublas-batched-gemm` | `cublasSgemmBatched` | https://github.com/NVIDIA/CUDALibrarySamples/tree/master/cuBLAS |
+| `online-softmax` | Online softmax (1-pass) | https://github.com/Dao-AILab/flash-attention |
+| `layer-norm` | LayerNorm CUDA kernel | https://github.com/NVIDIA/apex/tree/master/csrc |
+| `rms-norm` | RMSNorm (LLaMA-style) | https://github.com/meta-llama/llama/blob/main/llama/model.py |
+| `gelu-activation` | Fused bias+GELU | https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/fusions/fused_bias_gelu.py |
+| `rope-embedding` | RoPE (apply_rotary_emb) | https://github.com/meta-llama/llama/blob/main/llama/model.py |
+| `int8-quantization` | INT8 quantization kernels | https://github.com/TimDettmers/bitsandbytes |
+| `naive-attention` | Attention kernels | https://github.com/NVIDIA/TensorRT-LLM |
+| `flash-attention-tiling` | FlashAttention tiling | https://github.com/Dao-AILab/flash-attention |
+
+### Excluded Topics (No-Gos)
+
+| Topic | Reason |
+|-------|--------|
+| FlashAttention v2 full implementation | 200+ lines; `flash-attention-tiling` covers the core idea |
+| Multi-head attention | Requires multi-kernel coordination; exceeds single-file constraint |
+| PagedAttention / KV cache | System-level; see vLLM: https://github.com/vllm-project/vllm |
+| cuDNN Basics | Initialization boilerplate dominates; cuBLAS path is cleaner |
+| INT4 / FP8 quantization | Requires H100+; audience too narrow |
+| Speculative decoding | System-level scheduling; out of scope |
+
+### Conventions Established
+
+- **`Source:` as Markdown link**: Opening comments use `[display](url)` format so
+  blackfriday renders them as clickable `<a>` tags on example pages.
+- **CUB chapter intro in first example**: `cub-warp-reduce.cu` carries the chapter-level
+  CUB explanation. The other four `cub-*.cu` files each include a one-liner definition.
+  This avoids needing a generator-level chapter description feature.
+- **LLM operator ordering**: online-softmax → layer-norm → rms-norm → gelu → rope →
+  int8 → naive-attention → flash-attention-tiling. Each builds on the previous:
+  softmax is used in attention; LayerNorm before RMSNorm (simpler variant); GELU
+  before naive attention (activation used in FFN); attention before flash-attention.

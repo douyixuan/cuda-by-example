@@ -2,6 +2,7 @@
 // in a single call. Transformers use this for multi-head attention: each
 // head is a separate GEMM, and batching them avoids kernel launch overhead.
 //
+// Source: [github.com/NVIDIA/CUDALibrarySamples](https://github.com/NVIDIA/CUDALibrarySamples/tree/master/cuBLAS) — cuBLAS/
 // Compile: nvcc cublas-batched-gemm.cu -lcublas -o cublas-batched-gemm
 
 #include <stdio.h>

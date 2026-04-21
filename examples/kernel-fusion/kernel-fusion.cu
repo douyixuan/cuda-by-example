@@ -3,6 +3,7 @@
 // and ReLU activation are fused: one read, one write instead of two.
 // This pattern is ubiquitous in LLM inference (fused bias+GELU, etc.).
 //
+// Source: [github.com/NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/fusions) — fusions/
 // Compile: nvcc -arch=sm_80 kernel-fusion.cu -o kernel-fusion
 
 #include <stdio.h>

@@ -2,6 +2,7 @@
 // Each value is scaled to [-127, 127], stored as int8, then dequantized
 // back to float32 for computation. LLM.int8() uses this for 8-bit inference.
 //
+// Source: [github.com/TimDettmers/bitsandbytes](https://github.com/TimDettmers/bitsandbytes) — Int8 CUDA kernels
 // Compile: nvcc -arch=sm_80 int8-quantization.cu -o int8-quantization
 
 #include <stdio.h>

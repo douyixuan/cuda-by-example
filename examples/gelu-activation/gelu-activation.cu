@@ -3,6 +3,7 @@
 // avoids the slower erf() call and is accurate to within 0.0001.
 // Fusing bias add with GELU saves one global memory round-trip.
 //
+// Source: [github.com/NVIDIA/Megatron-LM](https://github.com/NVIDIA/Megatron-LM/blob/main/megatron/core/fusions/fused_bias_gelu.py) — bias\_gelu\_fusion
 // Compile: nvcc -arch=sm_80 gelu-activation.cu -o gelu-activation
 
 #include <stdio.h>

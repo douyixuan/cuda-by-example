@@ -1,7 +1,9 @@
+// CUB (CUDA Unbound) is NVIDIA's official header-only GPU primitives library.
 // CUB DeviceReduce reduces an entire array to a single value in one call.
 // The two-step pattern — query temp storage size, then execute — is the
 // standard CUB device-level API used by DeviceScan and DeviceSort too.
 //
+// Source: [github.com/NVIDIA/cccl](https://github.com/NVIDIA/cccl/tree/main/cub/cub/device) — device/
 // Compile: nvcc -arch=sm_80 cub-device-reduce.cu -o cub-device-reduce
 
 #include <cub/cub.cuh>

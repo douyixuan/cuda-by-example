@@ -2,6 +2,7 @@
 // Simpler than LayerNorm (no mean subtraction), used in LLaMA and Mistral.
 // One pass: compute sum of squares, then normalize.
 //
+// Source: [github.com/meta-llama/llama](https://github.com/meta-llama/llama/blob/main/llama/model.py) — RMSNorm
 // Compile: nvcc -arch=sm_80 rms-norm.cu -o rms-norm
 
 #include <stdio.h>

@@ -1,7 +1,9 @@
+// CUB (CUDA Unbound) is NVIDIA's official header-only GPU primitives library.
 // CUB DeviceSort sorts an array using radix sort — the fastest GPU sort
 // for integer and floating-point keys. Key-value pairs keep values
 // aligned with their keys after sorting.
 //
+// Source: [github.com/NVIDIA/cccl](https://github.com/NVIDIA/cccl/tree/main/cub/cub/device) — device/
 // Compile: nvcc -arch=sm_80 cub-device-sort.cu -o cub-device-sort
 
 #include <cub/cub.cuh>

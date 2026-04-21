@@ -3,6 +3,7 @@
 // two-pass approach (max scan, then exp/sum) used in naive softmax.
 // FlashAttention uses this trick to fuse the attention score computation.
 //
+// Source: [github.com/Dao-AILab/flash-attention](https://github.com/Dao-AILab/flash-attention) — softmax\_fwd kernel
 // Compile: nvcc -arch=sm_80 online-softmax.cu -o online-softmax
 
 #include <stdio.h>

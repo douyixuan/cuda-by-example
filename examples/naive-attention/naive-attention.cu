@@ -3,6 +3,7 @@
 // which is O(seq²) memory. Use small dimensions (seq=8, d=4) to keep
 // the example self-contained without cuBLAS.
 //
+// Source: [github.com/NVIDIA/TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) — attention kernels
 // Compile: nvcc -arch=sm_80 naive-attention.cu -o naive-attention
 
 #include <stdio.h>

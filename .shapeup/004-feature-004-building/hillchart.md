@@ -18,12 +18,10 @@
   ✓ rope-embedding — 完成（54 行）
   ✓ int8-quantization — 完成（55 行）
   ✓ naive-attention — 完成（66 行）
-  ▼ flash-attention-tiling — 下坡（97 行，超出 80 行限制，需要裁剪）
+  ✓ flash-attention-tiling — 完成（80 行，符合 ADR 0007 限制）
 
 ## 风险
-- flash-attention-tiling 超出 ADR 0007 的 80 行限制（当前 97 行），需裁剪约 17 行
+- 无。所有必须项完成，go test 全绿。
 
 ## 下一步
-1. 裁剪 flash-attention-tiling.cu 至 ≤80 行
-2. 运行 go test 确认全绿
-3. git commit 并运行 /ship 004
+1. git commit 并运行 /ship 004

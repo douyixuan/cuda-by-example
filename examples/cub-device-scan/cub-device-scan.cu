@@ -1,8 +1,10 @@
+// CUB (CUDA Unbound) is NVIDIA's official header-only GPU primitives library.
 // CUB DeviceScan computes a prefix sum (scan) over an array.
 // Inclusive scan: output[i] = input[0] + ... + input[i].
 // Exclusive scan: output[i] = input[0] + ... + input[i-1], output[0] = 0.
 // Compare with prefix-sum, which implements this manually with shared memory.
 //
+// Source: [github.com/NVIDIA/cccl](https://github.com/NVIDIA/cccl/tree/main/cub/cub/device) — device/
 // Compile: nvcc -arch=sm_80 cub-device-scan.cu -o cub-device-scan
 
 #include <cub/cub.cuh>

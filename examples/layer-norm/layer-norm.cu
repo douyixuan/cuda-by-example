@@ -3,6 +3,7 @@
 // Used in every transformer block. Requires two passes: mean, then variance.
 // feature_size must be a multiple of 32 to avoid warp divergence.
 //
+// Source: [github.com/NVIDIA/apex](https://github.com/NVIDIA/apex/tree/master/csrc) — layer\_norm\_cuda.cpp
 // Compile: nvcc -arch=sm_80 layer-norm.cu -o layer-norm
 
 #include <stdio.h>

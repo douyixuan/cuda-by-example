@@ -1,7 +1,9 @@
+// CUB (CUDA Unbound) is NVIDIA's official header-only GPU primitives library.
 // CUB BlockReduce reduces all threads in a block to a single value.
 // Unlike the manual parallel-reduction example, CUB manages shared
 // memory allocation and the reduction tree automatically.
 //
+// Source: [github.com/NVIDIA/cccl](https://github.com/NVIDIA/cccl/tree/main/cub/cub/block) — block/
 // Compile: nvcc -arch=sm_80 cub-block-reduce.cu -o cub-block-reduce
 
 #include <cub/cub.cuh>

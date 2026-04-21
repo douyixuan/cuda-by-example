@@ -1,7 +1,15 @@
-// CUB WarpReduce performs a reduction across all 32 threads in a warp
-// using hardware shuffle instructions — no shared memory required.
-// Compare with warp-primitives, which implements this manually.
+// CUB (CUDA Unbound) is NVIDIA's official GPU primitives library, shipped
+// with the CUDA Toolkit as a header-only library (`#include <cub/cub.cuh>`).
+// It provides three levels of primitives: Warp (32 threads), Block (one
+// thread block), and Device (entire GPU). At each level CUB handles shared
+// memory allocation, warp-boundary logic, and hardware-specific tuning.
+// The five examples that follow cover: WarpReduce → BlockReduce →
+// DeviceReduce → DeviceScan → DeviceSort.
 //
+// This example: WarpReduce sums 32 values per warp using shuffle instructions
+// — no shared memory required. Compare with warp-primitives (manual).
+//
+// Source: [github.com/NVIDIA/cccl](https://github.com/NVIDIA/cccl/tree/main/cub/cub/warp) — warp/
 // Compile: nvcc -arch=sm_80 cub-warp-reduce.cu -o cub-warp-reduce
 
 #include <cub/cub.cuh>
